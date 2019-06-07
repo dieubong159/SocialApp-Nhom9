@@ -50,6 +50,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
 
         Chat chat = mChat.get(position);
+        String msg_type = chat.getType();
 
         holder.show_message.setText(chat.getMessage());
 
@@ -69,6 +70,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             holder.txt_seen.setVisibility(View.GONE);
         }
 
+        if(msg_type.equals("text")){
+            holder.show_message.setText(chat.getMessage());
+            holder.msg_img.setVisibility(View.INVISIBLE);
+        }else {
+            holder.show_message.setVisibility(View.INVISIBLE);
+            Glide.with(mContext).load(chat.getMessage())
+                    .into(holder.msg_img);
+        }
+
     }
 
     @Override
@@ -80,6 +90,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         public TextView show_message;
         public ImageView profile_image;
+        public ImageView msg_img;
         public TextView txt_seen;
 
         public ViewHolder(View itemView) {
@@ -88,6 +99,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             show_message = itemView.findViewById(R.id.show_message);
             profile_image = itemView.findViewById(R.id.profile_image);
             txt_seen = itemView.findViewById(R.id.txt_seen);
+            msg_img = itemView.findViewById(R.id.msg_img);
         }
     }
 

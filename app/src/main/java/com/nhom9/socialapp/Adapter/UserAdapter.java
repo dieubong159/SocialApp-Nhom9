@@ -122,10 +122,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
                    if (firebaseUser != null && chat != null) {
-                        if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
-                                chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
-                            theLastMessage = chat.getMessage();
-                        }
+                       if(chat.getType().equals("text")) {
+                           if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
+                                   chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
+                               theLastMessage = chat.getMessage();
+                           }
+                       }else {
+                           if(chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid)){
+                               theLastMessage = "You have received an image";
+                           }else {
+                               theLastMessage = "You have sent an image";
+                           }
+                       }
                     }
                 }
 

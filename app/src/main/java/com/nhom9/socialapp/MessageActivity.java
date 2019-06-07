@@ -1,20 +1,29 @@
 package com.nhom9.socialapp;
 
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +32,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.nhom9.socialapp.Adapter.MessageAdapter;
 import com.nhom9.socialapp.Fragments.APIService;
 import com.nhom9.socialapp.Model.Chat;
@@ -50,8 +63,14 @@ public class MessageActivity extends AppCompatActivity {
     FirebaseUser fuser;
     DatabaseReference reference;
 
-    ImageButton btn_send;
+    ImageButton btn_send,btn_add_photo;
     EditText text_send;
+    private StorageTask uploadTask;
+    private Uri imageUri;
+    StorageReference storageReference;
+    public static String type;
+
+    private static final int GALERY_PICK = 1;
 
     MessageAdapter messageAdapter;
     List<Chat> mchat;
@@ -86,6 +105,7 @@ public class MessageActivity extends AppCompatActivity {
         });
 
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+        storageReference = FirebaseStorage.getInstance().getReference("message");
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -96,6 +116,7 @@ public class MessageActivity extends AppCompatActivity {
         profile_image = findViewById(R.id.profile_image);
         username = findViewById(R.id.username);
         btn_send = findViewById(R.id.btn_send);
+        btn_add_photo = findViewById(R.id.btn_add_photo);
         text_send = findViewById(R.id.text_send);
 
         intent = getIntent();
@@ -106,9 +127,10 @@ public class MessageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 notify = true;
+                type = "text";
                 String msg = text_send.getText().toString();
                 if (!msg.equals("")){
-                    sendMessage(fuser.getUid(), userid, msg);
+                    sendMessage(fuser.getUid(), userid, msg, type);
                 } else {
                     Toast.makeText(MessageActivity.this, "You can't send empty message", Toast.LENGTH_SHORT).show();
                 }
@@ -116,6 +138,16 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
+        btn_add_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent galleryIntent = new Intent();
+                galleryIntent.setType("image/*");
+                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+                startActivityForResult(galleryIntent, GALERY_PICK);
+            }
+        });
 
         reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
 
@@ -143,6 +175,75 @@ public class MessageActivity extends AppCompatActivity {
         seenMessage(userid);
     }
 
+    private String getFileExtension(Uri uri){
+        ContentResolver contentResolver = MessageActivity.this.getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
+    private void uploadImage(){
+        final ProgressDialog pd = new ProgressDialog(MessageActivity.this);
+        type = "image";
+        pd.setMessage("Uploading");
+        pd.show();
+
+        if(imageUri!=null){
+            final StorageReference fileReference = storageReference.child(System.currentTimeMillis()
+                    +"."+getFileExtension(imageUri));
+
+            uploadTask = fileReference.putFile(imageUri);
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if(!task.isSuccessful()){
+                        throw task.getException();
+                    }
+                    return fileReference.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if(task.isSuccessful()){
+                        Uri downloadUri = task.getResult();
+                        String mUri = downloadUri.toString();
+
+                        sendMessage(fuser.getUid(), userid, mUri, type);
+
+                        pd.dismiss();
+                    }else {
+                        Toast.makeText(MessageActivity.this, "Failed!!", Toast.LENGTH_SHORT).show();
+                        pd.dismiss();
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(MessageActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    pd.dismiss();
+                }
+            });
+        }else {
+            Toast.makeText(MessageActivity.this, "No image selected!!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == GALERY_PICK && resultCode == RESULT_OK && data != null && data.getData() != null){
+
+            imageUri = data.getData();
+
+            if(uploadTask != null && uploadTask.isInProgress()){
+                Toast.makeText(MessageActivity.this, "Upload in Progress", Toast.LENGTH_SHORT).show();
+            }else {
+                uploadImage();
+            }
+        }
+    }
+
+
     private void seenMessage(final String userid){
         reference = FirebaseDatabase.getInstance().getReference("Chats");
         seenListener = reference.addValueEventListener(new ValueEventListener() {
@@ -165,7 +266,7 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
 
-    private void sendMessage(String sender, final String receiver, String message){
+    private void sendMessage(String sender, final String receiver, String message, final String type){
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
@@ -174,6 +275,7 @@ public class MessageActivity extends AppCompatActivity {
         hashMap.put("receiver", receiver);
         hashMap.put("message", message);
         hashMap.put("isseen", false);
+        hashMap.put("type", type);
 
         reference.child("Chats").push().setValue(hashMap);
 
@@ -210,7 +312,11 @@ public class MessageActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 if (notify) {
-                    sendNotifiaction(receiver, user.getUsername(), msg);
+                    if(type.equals("text")){
+                        sendNotifiaction(receiver, user.getUsername(),msg);
+                    }else {
+                        sendNotifiaction(receiver, user.getUsername(),"You received an image!");
+                    }
                 }
                 notify = false;
             }
