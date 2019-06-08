@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PostStatusActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar_lay">
+
+        <include
+            layout="@layout/bar_layout"
+            android:id="@+id/toolbar"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/ic_forward_post"
+            android:id="@+id/btn_share"/>
+
+    </RelativeLayout>
+
+    <com.rengwuxian.materialedittext.MaterialMultiAutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/post_content"
+        android:hint="What are you thinking?"
+        android:textSize="18sp"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:layout_below="@id/toolbar_lay"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#fff">
+
+        <ImageButton
+            android:id="@+id/btn_add_photo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/ic_add_photo_post" />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_toRightOf="@id/btn_add_photo"
+            android:id="@+id/uploaded_photo"/>
+    </RelativeLayout>
+
+</RelativeLayout>

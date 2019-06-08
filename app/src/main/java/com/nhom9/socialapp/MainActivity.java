@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.nhom9.socialapp.Fragments.ChatsFragment;
+import com.nhom9.socialapp.Fragments.PostFragment;
 import com.nhom9.socialapp.Fragments.ProfileFragment;
 import com.nhom9.socialapp.Fragments.UsersFragment;
 import com.nhom9.socialapp.Model.Chat;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     CircleImageView profile_image;
     TextView username;
+
 
     FirebaseUser firebaseUser;
     DatabaseReference reference;
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
+                viewPagerAdapter.addFragment(new PostFragment(), "Posts");
                 if (unread == 0){
                     viewPagerAdapter.addFragment(new ChatsFragment(), "Chats");
                 } else {

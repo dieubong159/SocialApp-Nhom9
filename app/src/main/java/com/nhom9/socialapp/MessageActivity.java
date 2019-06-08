@@ -336,8 +336,14 @@ public class MessageActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username+": "+message, "New Message",
-                            userid);
+                    Data data;
+                    if(type.equals("text")) {
+                        data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username + ": " + message, "New Message",
+                                userid);
+                    }else {
+                        data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username + ": ", "You have received an image",
+                                userid);
+                    }
 
                     Sender sender = new Sender(data, token.getToken());
 

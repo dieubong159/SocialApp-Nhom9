@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/forward"
+        android:icon="@drawable/ic_forward_post"
+        app:showAsAction="ifRoom"
+        android:title="Forward">
+    </item>
+</menu>
