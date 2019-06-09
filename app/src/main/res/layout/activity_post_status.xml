@@ -38,21 +38,34 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:background="#fff">
 
         <ImageButton
             android:id="@+id/btn_add_photo"
             android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_height="fill_parent"
             android:background="@drawable/ic_add_photo_post" />
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+        <com.mhmtk.twowaygrid.TwoWayGridView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/uploaded_photo"
             android:layout_toRightOf="@id/btn_add_photo"
-            android:id="@+id/uploaded_photo"/>
+            android:background="#FFF"
+            app:cacheColorHint="#E8E8E8"
+            app:columnWidth="100dp"
+            app:rowHeight="100dp"
+            app:numColumns="auto_fit"
+            app:numRows="auto_fit"
+            app:horizontalSpacing="10dp"
+            app:stretchMode="spacingWidthUniform"
+            app:scrollDirectionPortrait="horizontal"
+            app:scrollDirectionLandscape="horizontal"
+            app:gravity="center">
+
+        </com.mhmtk.twowaygrid.TwoWayGridView>
     </RelativeLayout>
 
 </RelativeLayout>

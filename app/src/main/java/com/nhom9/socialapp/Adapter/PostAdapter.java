@@ -1,11 +1,13 @@
 package com.nhom9.socialapp.Adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,11 +20,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.mhmtk.twowaygrid.TwoWayGridView;
+import com.nhom9.socialapp.CustomGridview;
 import com.nhom9.socialapp.Model.Post;
 import com.nhom9.socialapp.Model.User;
 import com.nhom9.socialapp.R;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +37,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     private List<Post> mPosts;
 
     FirebaseUser fuser;
+    ArrayList<Uri> lstImageUri;
     DatabaseReference reference;
     User user;
 
@@ -61,13 +67,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             Glide.with(mContext).load(post.getOwner().getImageURL()).into(viewHolder.profile_image);
         }
 
-        for(String img_url : post.getImage()){
-            if(img_url.equals("none")){
+            if(post.getImage().get(0).equals("none")){
                 viewHolder.post_img.setVisibility(View.GONE);
             }else {
-                Glide.with(mContext).load(img_url).into(viewHolder.post_img);
+                for(int count = 0;count<post.getImage().size();count++)
+                {
+                    lstImageUri = new ArrayList<>();
+                    lstImageUri.add(Uri.parse(post.getImage().get(count)));
+                }
+                PostImageAdapter galleryAdapter = new PostImageAdapter(mContext, lstImageUri);
+                viewHolder.post_img.setAdapter(galleryAdapter);
             }
-        }
     }
 
     @Override
@@ -80,7 +90,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         public ImageView profile_image;
         public TextView upload_time;
         public TextView post_content;
-        public ImageView post_img;
+        public CustomGridview post_img;
 
         public ViewHolder(View itemView){
             super(itemView);
@@ -89,25 +99,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             profile_image = itemView.findViewById(R.id.profile_image);
             upload_time = itemView.findViewById(R.id.upload_time);
             post_content = itemView.findViewById(R.id.post_content);
-            post_img = itemView.findViewById(R.id.post_img);
+            post_img = itemView.findViewById(R.id.gv_post);
         }
     }
-
-//    private User RetrieveUser(final String userid){
-//        reference = FirebaseDatabase.getInstance().getReference();
-//        DatabaseReference ref = reference.child("Users").child(userid);
-//
-//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                user = dataSnapshot.getValue(User.class);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//        return user;
-//    }
 }
