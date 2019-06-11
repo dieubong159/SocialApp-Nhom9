@@ -15,14 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "515524827633-na5nogd5t8kr87237kbl71pu3u66fvtk.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.nhom9.socialapp",
-            "certificate_hash": "97884ff90b360a917bbcbecbe3bb61222e9ea0ce"
-          }
-        },
-        {
           "client_id": "515524827633-tnrd3j64d000r8e222l8bte337r514dc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
