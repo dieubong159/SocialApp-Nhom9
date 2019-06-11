@@ -42,6 +42,7 @@ import com.nhom9.socialapp.Model.Chat;
 import com.nhom9.socialapp.Model.User;
 import com.nhom9.socialapp.Notifications.Client;
 import com.nhom9.socialapp.Notifications.Data;
+import com.nhom9.socialapp.Notifications.MyFirebaseMessaging;
 import com.nhom9.socialapp.Notifications.MyResponse;
 import com.nhom9.socialapp.Notifications.Sender;
 import com.nhom9.socialapp.Notifications.Token;
@@ -267,7 +268,7 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void sendMessage(String sender, final String receiver, String message, final String type){
-
+        MyFirebaseMessaging.isPost = false;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
         HashMap<String, Object> hashMap = new HashMap<>();

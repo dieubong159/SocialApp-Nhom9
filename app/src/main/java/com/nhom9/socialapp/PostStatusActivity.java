@@ -28,14 +28,23 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.mhmtk.twowaygrid.TwoWayGridView;
 import com.nhom9.socialapp.Adapter.GalleryAdapter;
+import com.nhom9.socialapp.Fragments.APIService;
 import com.nhom9.socialapp.Model.User;
+import com.nhom9.socialapp.Notifications.Client;
+import com.nhom9.socialapp.Notifications.Data;
+import com.nhom9.socialapp.Notifications.MyFirebaseMessaging;
+import com.nhom9.socialapp.Notifications.MyResponse;
+import com.nhom9.socialapp.Notifications.Sender;
+import com.nhom9.socialapp.Notifications.Token;
 import com.rengwuxian.materialedittext.MaterialMultiAutoCompleteTextView;
 
 import java.text.SimpleDateFormat;
@@ -43,6 +52,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PostStatusActivity extends AppCompatActivity {
 
@@ -57,6 +70,8 @@ public class PostStatusActivity extends AppCompatActivity {
     List<String> imagelist;
     private GalleryAdapter galleryAdapter;
     Integer count = 0;
+    ArrayList<User> lstUsers;
+    APIService apiService;
 
 
     User owner;
@@ -75,6 +90,7 @@ public class PostStatusActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Post Status");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
         storageReference = FirebaseStorage.getInstance().getReference("post");
 
         btn_add_photo = findViewById(R.id.btn_add_photo);
@@ -83,6 +99,7 @@ public class PostStatusActivity extends AppCompatActivity {
         post_content = findViewById(R.id.post_content);
         lstImageUri = new ArrayList<>();
         imagelist = new ArrayList<>();
+        lstUsers = new ArrayList<>();
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(fuser.getUid());
@@ -97,7 +114,23 @@ public class PostStatusActivity extends AppCompatActivity {
 
             }
         });
+        reference = FirebaseDatabase.getInstance().getReference().child("Users");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    User user = snapshot.getValue(User.class);
+                        if(!user.getId().equals(fuser.getUid())){
+                            lstUsers.add(user);
+                    }
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
         btn_add_photo.setOnClickListener(new View.OnClickListener() {
@@ -110,10 +143,11 @@ public class PostStatusActivity extends AppCompatActivity {
         btn_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MyFirebaseMessaging.isPost=true;
                 Toast.makeText(PostStatusActivity.this, "Posting...", Toast.LENGTH_SHORT).show();
                 final String postContent = post_content.getText().toString().trim();
                 if (!TextUtils.isEmpty(postContent)) {
-                    if(lstImageUri != null) {
+                    if(lstImageUri.size() != 0) {
                         uploadImage();
                     }else {
                         uploadPostNoImage();
@@ -135,12 +169,16 @@ public class PostStatusActivity extends AppCompatActivity {
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("content", post_content.getText().toString().trim());
-        hashMap.put("image", "none");
+        imagelist.add("none");
+        hashMap.put("image", imagelist);
         hashMap.put("owner", owner);
         timeStamp = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
         hashMap.put("uploadtime", timeStamp);
 
         reference.child("Posts").push().setValue(hashMap);
+        for(User user : lstUsers){
+            sendNotifiaction(user.getId(), user.getUsername(), " just posted a status!");
+        }
         Intent intent = new Intent(PostStatusActivity.this, MainActivity.class);
         startActivity(intent);
     }
@@ -156,6 +194,9 @@ public class PostStatusActivity extends AppCompatActivity {
         hashMap.put("uploadtime", timeStamp);
 
         reference.child("Posts").push().setValue(hashMap);
+        for(User user : lstUsers){
+            sendNotifiaction(user.getId(), user.getUsername(), " just posted a status!");
+        }
         Intent intent = new Intent(PostStatusActivity.this, MainActivity.class);
         startActivity(intent);
     }
@@ -297,5 +338,47 @@ public class PostStatusActivity extends AppCompatActivity {
             Toast.makeText(this, "Something went wrong",Toast.LENGTH_LONG).show();
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void sendNotifiaction(String receiver, final String username, final String message){
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
+        Query query = tokens.orderByKey().equalTo(receiver);
+        for(int i=0;i<lstUsers.size();i++) {
+            final int finalI = i;
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Token token = snapshot.getValue(Token.class);
+                        Data data;
+                        data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username + ": " + message, "New Notification",
+                                lstUsers.get(finalI).getId());
+                        Sender sender = new Sender(data, token.getToken());
+
+                        apiService.sendNotification(sender)
+                                .enqueue(new Callback<MyResponse>() {
+                                    @Override
+                                    public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                        if (response.code() == 200) {
+                                            if (response.body().success != 1) {
+                                                Toast.makeText(PostStatusActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                                    }
+                                });
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 }

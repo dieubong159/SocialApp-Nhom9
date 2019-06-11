@@ -16,9 +16,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.nhom9.socialapp.MainActivity;
 import com.nhom9.socialapp.MessageActivity;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
+
+    public static boolean isPost;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -34,8 +37,8 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         if (firebaseUser != null && sented.equals(firebaseUser.getUid())){
             if (!currentUser.equals(user)) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    sendOreoNotification(remoteMessage);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    sendPieNotification(remoteMessage);
                 } else {
                     sendNotification(remoteMessage);
                 }
@@ -43,7 +46,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         }
     }
 
-    private void sendOreoNotification(RemoteMessage remoteMessage){
+    private void sendPieNotification(RemoteMessage remoteMessage){
         String user = remoteMessage.getData().get("user");
         String icon = remoteMessage.getData().get("icon");
         String title = remoteMessage.getData().get("title");
@@ -51,7 +54,12 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
-        Intent intent = new Intent(this, MessageActivity.class);
+        Intent intent;
+        if(isPost==false) {
+            intent = new Intent(this, MessageActivity.class);
+        }else {
+            intent = new Intent(this, MainActivity.class);
+        }
         Bundle bundle = new Bundle();
         bundle.putString("userid", user);
         intent.putExtras(bundle);
@@ -81,7 +89,12 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
-        Intent intent = new Intent(this, MessageActivity.class);
+        Intent intent;
+        if(isPost==false) {
+            intent = new Intent(this, MessageActivity.class);
+        }else {
+            intent = new Intent(this, MainActivity.class);
+        }
         Bundle bundle = new Bundle();
         bundle.putString("userid", user);
         intent.putExtras(bundle);
