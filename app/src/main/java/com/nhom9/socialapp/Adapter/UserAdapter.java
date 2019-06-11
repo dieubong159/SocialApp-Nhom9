@@ -57,6 +57,32 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
         final User user = mUsers.get(position);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        reference = FirebaseDatabase.getInstance().getReference("Chats");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int unread = 0;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen() && chat.getSender().equals(user.getId())){
+                        unread++;
+                    }
+                }
+                if (unread == 0){
+                    holder.username.setText(user.getUsername());
+                } else {
+                    holder.username.setText(user.getUsername() + "("+unread+")");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         holder.username.setText(user.getUsername());
 
         if (user.getImageURL().equals("default")){

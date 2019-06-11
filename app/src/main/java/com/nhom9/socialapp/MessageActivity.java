@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -64,7 +65,7 @@ public class MessageActivity extends AppCompatActivity {
     FirebaseUser fuser;
     DatabaseReference reference;
 
-    ImageButton btn_send,btn_add_photo;
+    ImageButton btn_send,btn_add_photo,btn_take_photo;
     EditText text_send;
     private StorageTask uploadTask;
     private Uri imageUri;
@@ -72,6 +73,7 @@ public class MessageActivity extends AppCompatActivity {
     public static String type;
 
     private static final int GALERY_PICK = 1;
+    private static final int REQUEST_TAKE_PHOTO = 1;
 
     MessageAdapter messageAdapter;
     List<Chat> mchat;
@@ -120,6 +122,8 @@ public class MessageActivity extends AppCompatActivity {
         btn_add_photo = findViewById(R.id.btn_add_photo);
         text_send = findViewById(R.id.text_send);
 
+        btn_take_photo = findViewById(R.id.btn_take_photo);
+
         intent = getIntent();
         userid = intent.getStringExtra("userid");
         fuser = FirebaseAuth.getInstance().getCurrentUser();
@@ -147,6 +151,14 @@ public class MessageActivity extends AppCompatActivity {
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
 
                 startActivityForResult(galleryIntent, GALERY_PICK);
+            }
+        });
+
+        btn_take_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent,REQUEST_TAKE_PHOTO);
             }
         });
 
@@ -240,6 +252,15 @@ public class MessageActivity extends AppCompatActivity {
                 Toast.makeText(MessageActivity.this, "Upload in Progress", Toast.LENGTH_SHORT).show();
             }else {
                 uploadImage();
+            }
+        }else{
+            if(requestCode== REQUEST_TAKE_PHOTO && resultCode == RESULT_OK){
+                imageUri = data.getData();
+                if(uploadTask != null && uploadTask.isInProgress()){
+                    Toast.makeText(MessageActivity.this, "Upload in Progress", Toast.LENGTH_SHORT).show();
+                }else {
+                    uploadImage();
+                }
             }
         }
     }
