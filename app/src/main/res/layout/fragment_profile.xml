@@ -57,6 +57,7 @@
                 android:background="@drawable/ic_camera_alt_black_24dp" />
 
             <TextView
+                android:id="@+id/profile_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -68,6 +69,7 @@
                 android:textStyle="bold"/>
 
             <TextView
+                android:id="@+id/profile_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"

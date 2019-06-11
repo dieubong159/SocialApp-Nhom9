@@ -49,6 +49,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
 
+        holder.msg_img.setImageBitmap(null);
         Chat chat = mChat.get(position);
         String msg_type = chat.getType();
 
@@ -57,6 +58,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         if (imageurl.equals("default")){
             holder.profile_image.setImageResource(R.mipmap.ic_user_round);
         } else {
+            holder.msg_img.setVisibility(View.VISIBLE);
             Glide.with(mContext).load(imageurl).into(holder.profile_image);
         }
 
@@ -72,9 +74,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         if(msg_type.equals("text")){
             holder.show_message.setText(chat.getMessage());
-            holder.msg_img.setVisibility(View.INVISIBLE);
+            holder.msg_img.setVisibility(View.GONE);
         }else {
-            holder.show_message.setVisibility(View.INVISIBLE);
+            holder.show_message.setVisibility(View.GONE);
             Glide.with(mContext).load(chat.getMessage())
                     .into(holder.msg_img);
         }
@@ -100,6 +102,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             profile_image = itemView.findViewById(R.id.profile_image);
             txt_seen = itemView.findViewById(R.id.txt_seen);
             msg_img = itemView.findViewById(R.id.msg_img);
+            this.setIsRecyclable(false);
         }
     }
 

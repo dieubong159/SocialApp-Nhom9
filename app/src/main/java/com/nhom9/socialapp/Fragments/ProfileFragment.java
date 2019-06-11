@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +45,8 @@ import static android.app.Activity.RESULT_OK;
 public class ProfileFragment extends Fragment {
 
     CircleImageView image_profile;
-    TextView username;
+    TextView username, profile_email, profile_password;
+    Button btn_change_pic;
 
     DatabaseReference reference;
     FirebaseUser fuser;
@@ -63,6 +65,9 @@ public class ProfileFragment extends Fragment {
 
         image_profile = view.findViewById(R.id.profile_image);
         username = view.findViewById(R.id.username);
+        btn_change_pic = view.findViewById(R.id.btn_change_pic);
+        profile_email = view.findViewById(R.id.profile_email);
+        profile_password = view.findViewById(R.id.profile_password);
 
         storageReference = FirebaseStorage.getInstance().getReference("profile");
 
@@ -78,6 +83,9 @@ public class ProfileFragment extends Fragment {
                     } else {
                         Glide.with(getContext()).load(user.getImageURL()).into(image_profile);
                     }
+                    username.setText(user.getUsername());
+                    profile_email.setText(fuser.getEmail());
+//                    profile_password.setText(fuser.);
                 }
             }
 
@@ -87,7 +95,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        image_profile.setOnClickListener(new View.OnClickListener() {
+        btn_change_pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openImage();

@@ -47,6 +47,7 @@ public class ChatsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0);
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
