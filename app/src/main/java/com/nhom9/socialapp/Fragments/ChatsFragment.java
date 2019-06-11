@@ -88,45 +88,21 @@ public class ChatsFragment extends Fragment {
 
     private void chatList() {
         mUsers = new ArrayList<>();
-        fuser = FirebaseAuth.getInstance().getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference("Chats");
+        reference = FirebaseDatabase.getInstance().getReference("Users");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                unread = 0;
+                mUsers.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    final Chat chat = snapshot.getValue(Chat.class);
-                    if (chat.getReceiver().equals(fuser.getUid()) && !chat.isIsseen()){
-                        unread++;
+                    User user = snapshot.getValue(User.class);
+                    for (Chatlist chatlist : usersList){
+                        if (user.getId().equals(chatlist.getId())){
+                            mUsers.add(user);
+                        }
                     }
-                    reference = FirebaseDatabase.getInstance().getReference("Users");
-                    reference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            mUsers.clear();
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                                User user = snapshot.getValue(User.class);
-                                for (Chatlist chatlist : usersList){
-                                    if(chat.getSender().equals(chatlist.getId())) {
-                                        if (unread != 0) {
-                                            user.setUsername(user.getUsername() + "(" + unread + ")");
-                                        }
-                                    }
-                                    if (user.getId().equals(chatlist.getId())){
-                                            mUsers.add(user);
-                                    }
-                                }
-                            }
-                            userAdapter = new UserAdapter(getContext(), mUsers, true);
-                            recyclerView.setAdapter(userAdapter);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
                 }
+                userAdapter = new UserAdapter(getContext(), mUsers, true);
+                recyclerView.setAdapter(userAdapter);
             }
 
             @Override
