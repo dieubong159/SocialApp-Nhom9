@@ -158,7 +158,7 @@ public class MessageActivity extends AppCompatActivity {
                 User user = dataSnapshot.getValue(User.class);
                 username.setText(user.getUsername());
                 if (user.getImageURL().equals("default")){
-                    profile_image.setImageResource(R.mipmap.ic_launcher);
+                    profile_image.setImageResource(R.mipmap.ic_user_round);
                 } else {
                     //and this
                     Glide.with(getApplicationContext()).load(user.getImageURL()).into(profile_image);
@@ -339,10 +339,10 @@ public class MessageActivity extends AppCompatActivity {
                     Token token = snapshot.getValue(Token.class);
                     Data data;
                     if(type.equals("text")) {
-                        data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username + ": " + message, "New Message",
+                        data = new Data(fuser.getUid(), R.mipmap.ic_user_round, username + ": " + message, "New Message",
                                 userid);
                     }else {
-                        data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username + ": ", "You have received an image",
+                        data = new Data(fuser.getUid(), R.mipmap.ic_user_round, username + ": ", "You have received an image",
                                 userid);
                     }
 

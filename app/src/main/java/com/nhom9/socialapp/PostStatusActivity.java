@@ -351,7 +351,7 @@ public class PostStatusActivity extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Token token = snapshot.getValue(Token.class);
                         Data data;
-                        data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username + ": " + message, "New Notification",
+                        data = new Data(fuser.getUid(), R.mipmap.ic_user_round, username + ": " + message, "New Notification",
                                 lstUsers.get(finalI).getId());
                         Sender sender = new Sender(data, token.getToken());
 

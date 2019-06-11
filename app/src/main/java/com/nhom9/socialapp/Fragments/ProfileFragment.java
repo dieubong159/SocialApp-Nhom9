@@ -2,6 +2,7 @@ package com.nhom9.socialapp.Fragments;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -67,16 +68,16 @@ public class ProfileFragment extends Fragment {
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
-
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                username.setText(user.getUsername());
-                if (user.getImageURL().equals("default")){
-                    image_profile.setImageResource(R.mipmap.ic_launcher);
-                } else {
-                    Glide.with(getContext()).load(user.getImageURL()).into(image_profile);
+                if(isAdded()) {
+                    User user = dataSnapshot.getValue(User.class);
+                    if (user.getImageURL().equals("default")) {
+                        image_profile.setImageResource(R.mipmap.ic_user_round);
+                    } else {
+                        Glide.with(getContext()).load(user.getImageURL()).into(image_profile);
+                    }
                 }
             }
 

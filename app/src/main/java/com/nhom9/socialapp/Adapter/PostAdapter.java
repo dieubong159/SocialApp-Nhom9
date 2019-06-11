@@ -48,7 +48,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         viewHolder.username.setText(post.getOwner().getUsername());
         viewHolder.upload_time.setText(post.getUploadtime());
         if(post.getOwner().getImageURL().equals("default")){
-            viewHolder.profile_image.setImageResource(R.mipmap.ic_launcher_round);
+            viewHolder.profile_image.setImageResource(R.mipmap.ic_user_round);
         }else {
             Glide.with(mContext).load(post.getOwner().getImageURL()).into(viewHolder.profile_image);
         }

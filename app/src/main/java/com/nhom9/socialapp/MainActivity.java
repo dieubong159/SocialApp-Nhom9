@@ -56,20 +56,19 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("");
 
 
+        profile_image = findViewById(R.id.profile_image);
 
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
-
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 //username.setText(user.getUsername());
                 if (user.getImageURL().equals("default") == true) {
-                    //profile_image.setImageResource(R.mipmap.ic_launcher);
+                    profile_image.setImageResource(R.mipmap.ic_user_round);
                 } else {
-
                     //change this
                     Glide.with(getApplicationContext()).load(user.getImageURL()).into(profile_image);
                 }
@@ -121,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fm_container, new ChatsFragment()).commit();
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

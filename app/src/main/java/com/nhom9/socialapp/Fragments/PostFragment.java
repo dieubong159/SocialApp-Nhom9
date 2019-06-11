@@ -80,7 +80,7 @@ public class PostFragment extends Fragment {
                 if(isAdded()) {
                     User user = dataSnapshot.getValue(User.class);
                     if (user.getImageURL().equals("default")) {
-                        profile_image.setImageResource(R.mipmap.ic_launcher_round);
+                        profile_image.setImageResource(R.mipmap.ic_user_round);
                     } else {
                         Glide.with(getContext()).load(user.getImageURL()).into(profile_image);
                     }
