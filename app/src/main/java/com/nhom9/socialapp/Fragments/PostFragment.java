@@ -31,6 +31,7 @@ import com.nhom9.socialapp.R;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -134,6 +135,7 @@ public class PostFragment extends Fragment {
                     Post post = snapshot.getValue(Post.class);
                     mPosts.add(post);
                 }
+                Collections.reverse(mPosts);
                 postAdapter = new PostAdapter(getContext(), mPosts);
                 posts_view.setAdapter(postAdapter);
             }
