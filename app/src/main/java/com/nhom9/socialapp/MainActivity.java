@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -53,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
 
-        profile_image = findViewById(R.id.profile_image);
-        username = findViewById(R.id.username);
+
+
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
@@ -63,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                username.setText(user.getUsername());
+                //username.setText(user.getUsername());
                 if (user.getImageURL().equals("default") == true) {
-                    profile_image.setImageResource(R.mipmap.ic_launcher);
+                    //profile_image.setImageResource(R.mipmap.ic_launcher);
                 } else {
 
                     //change this
@@ -80,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final TabLayout tabLayout = findViewById(R.id.tab_layout);
-        final ViewPager viewPager = findViewById(R.id.view_pager);
+        //final TabLayout tabLayout = findViewById(R.id.tab_layout);
+        //final ViewPager viewPager = findViewById(R.id.view_pager);
 
 
         reference = FirebaseDatabase.getInstance().getReference("Chats");
@@ -107,10 +109,10 @@ public class MainActivity extends AppCompatActivity {
                 viewPagerAdapter.addFragment(new UsersFragment(), "Users");
                 viewPagerAdapter.addFragment(new ProfileFragment(), "Profile");
 
-                viewPager.setAdapter(viewPagerAdapter);
+                //viewPager.setAdapter(viewPagerAdapter);
 
-                tabLayout.setupWithViewPager(viewPager);
-
+//                tabLayout.setupWithViewPager(viewPager);
+//                tabLayout.getTabAt(0).setIcon(R.drawable.ic_action_name);
             }
 
             @Override
@@ -119,7 +121,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case  R.id.action_home:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fm_container, new ChatsFragment()).commit();
+                        break;
+                    case  R.id.action_account:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fm_container, new UsersFragment()).commit();
+                        break;
+                    case  R.id.action_Profile:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fm_container, new ProfileFragment()).commit();
+                        break;
+                    case  R.id.action_time:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fm_container, new PostFragment()).commit();
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -184,6 +206,13 @@ public class MainActivity extends AppCompatActivity {
         hashMap.put("status", status);
 
         reference.updateChildren(hashMap);
+    }
+
+    private void loadFragment(Fragment fragment){
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.replace(R.id.frame_container,fragment );
+//        transaction.addToBackStack(null);
+//        transaction.commit();
     }
 
     @Override

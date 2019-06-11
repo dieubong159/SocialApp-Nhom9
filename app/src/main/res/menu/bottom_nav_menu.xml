@@ -3,20 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_home"
-        android:enabled="true"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="Home"
-        app:showAsAction="ifRoom" />
+        android:icon="@drawable/ic_message_black_24dp"
+        android:title="Tin nhắn" />
     <item
-        android:id="@+id/action_playlist"
-        android:enabled="true"
-        android:icon="@drawable/ic_music_note_24dp"
-        android:title="Playlist"
-        app:showAsAction="ifRoom" />
+        android:id="@+id/action_account"
+        android:icon="@drawable/ic_account_box_black_24dp"
+        android:title="Danh bạ" />
     <item
-        android:id="@+id/action_nearby"
-        android:enabled="true"
-        android:icon="@drawable/ic_search_black_24dp"
-        android:title="Search"
-        app:showAsAction="ifRoom" />
+        android:id="@+id/action_time"
+        android:icon="@drawable/ic_access_time_black_24dp"
+        android:title="Nhật kí" />
+    <item
+    android:id="@+id/action_Profile"
+    android:icon="@drawable/ic_person_black_24dp"
+    android:title="Thông tin" />
+
+
+
 </menu>
