@@ -56,9 +56,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             if(post.getImage().get(0).equals("none")){
                 viewHolder.post_img.setVisibility(View.GONE);
             }else {
+                lstImageUri = new ArrayList<>();
                 for(int count = 0;count<post.getImage().size();count++)
                 {
-                    lstImageUri = new ArrayList<>();
                     lstImageUri.add(Uri.parse(post.getImage().get(count)));
                 }
                 PostImageAdapter galleryAdapter = new PostImageAdapter(mContext, lstImageUri);
