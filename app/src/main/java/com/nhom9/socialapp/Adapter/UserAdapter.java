@@ -18,6 +18,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.nhom9.socialapp.Fragments.ChatsFragment;
+import com.nhom9.socialapp.Fragments.PostFragment;
+import com.nhom9.socialapp.Fragments.ProfileFragment;
+import com.nhom9.socialapp.Fragments.UsersFragment;
+import com.nhom9.socialapp.MainActivity;
 import com.nhom9.socialapp.MessageActivity;
 import com.nhom9.socialapp.Model.Chat;
 import com.nhom9.socialapp.Model.User;
@@ -30,6 +35,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private Context mContext;
     private List<User> mUsers;
     private boolean ischat;
+    FirebaseUser firebaseUser;
+    DatabaseReference reference;
 
     String theLastMessage;
 
@@ -47,10 +54,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
         final User user = mUsers.get(position);
         holder.username.setText(user.getUsername());
+
         if (user.getImageURL().equals("default")){
             holder.profile_image.setImageResource(R.mipmap.ic_user_round);
         } else {
@@ -122,16 +130,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
                    if (firebaseUser != null && chat != null) {
-                       if(chat.getType().equals("text")) {
-                           if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
-                                   chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
+                       if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
+                               chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
+                           if (chat.getType().equals("text")) {
                                theLastMessage = chat.getMessage();
-                           }
-                       }else {
-                           if(chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid)){
-                               theLastMessage = "You have received an image";
-                           }else {
-                               theLastMessage = "You have sent an image";
+                           } else {
+                               if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid)) {
+                                   theLastMessage = "You have received an image";
+                               } else {
+                                   theLastMessage = "You have sent an image";
+                               }
                            }
                        }
                     }
