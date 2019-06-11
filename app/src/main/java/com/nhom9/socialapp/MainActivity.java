@@ -81,45 +81,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //final TabLayout tabLayout = findViewById(R.id.tab_layout);
-        //final ViewPager viewPager = findViewById(R.id.view_pager);
-
-
-        reference = FirebaseDatabase.getInstance().getReference("Chats");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-                int unread = 0;
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Chat chat = snapshot.getValue(Chat.class);
-                    if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()){
-                        unread++;
-                    }
-                }
-
-                viewPagerAdapter.addFragment(new PostFragment(), "Posts");
-                if (unread == 0){
-                    viewPagerAdapter.addFragment(new ChatsFragment(), "Chats");
-                } else {
-                    viewPagerAdapter.addFragment(new ChatsFragment(), "("+unread+") Chats");
-                }
-
-                viewPagerAdapter.addFragment(new UsersFragment(), "Users");
-                viewPagerAdapter.addFragment(new ProfileFragment(), "Profile");
-
-                //viewPager.setAdapter(viewPagerAdapter);
-
-//                tabLayout.setupWithViewPager(viewPager);
-//                tabLayout.getTabAt(0).setIcon(R.drawable.ic_action_name);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fm_container, new ChatsFragment()).commit();
         BottomNavigationView navView = findViewById(R.id.nav_view);
