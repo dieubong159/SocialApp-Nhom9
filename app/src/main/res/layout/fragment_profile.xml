@@ -18,9 +18,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Profile"
+                android:text="Thông tin cá nhân"
                 android:textColor="@color/colorPrimaryDark"
-                android:textStyle="bold"/>
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:layout_centerHorizontal="true"
+                />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="100dp"
@@ -42,6 +45,39 @@
                 android:id="@+id/username"
                 android:textSize="18sp"
                 android:layout_marginBottom="20dp"/>
+
+            <Button
+                android:id="@+id/btn_change_pic"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignBottom="@id/profile_image"
+                android:layout_marginLeft="1dp"
+                android:layout_marginBottom="-4dp"
+                android:layout_toRightOf="@id/profile_image"
+                android:background="@drawable/ic_camera_alt_black_24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="221dp"
+                android:text="Email: nguyentan.dc25@gmail.com"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="-133dp"
+                android:layout_marginTop="280dp"
+                android:text="Password: 01663482341"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
 
         </RelativeLayout>
 
