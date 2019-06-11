@@ -59,20 +59,29 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/btn_add_photo"
-            android:background="@drawable/ic_add_photo"
+            android:background="@drawable/ic_galary_photo"
             android:layout_alignParentLeft="true"
             />
 
+        <ImageButton
+            android:id="@+id/btn_take_photo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="48dp"
+            android:background="@drawable/ic_add_photo" />
+
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/text_send"
+            android:layout_width="269dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="52dp"
+            android:layout_toLeftOf="@id/btn_send"
+            android:layout_toRightOf="@id/btn_add_photo"
             android:background="@android:color/transparent"
             android:hint="Type a message..."
-            android:paddingLeft="20dp"
-            android:layout_toRightOf="@id/btn_add_photo"
-            android:layout_toLeftOf="@id/btn_send"
-            android:layout_centerVertical="true"/>
+            android:paddingLeft="20dp" />
 
         <ImageButton
             android:layout_width="40dp"
