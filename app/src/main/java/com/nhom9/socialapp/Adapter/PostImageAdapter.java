@@ -1,6 +1,7 @@
 package com.nhom9.socialapp.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.nhom9.socialapp.FullScreenImageActivity;
 import com.nhom9.socialapp.R;
 
 import java.util.ArrayList;
@@ -41,13 +43,21 @@ public class PostImageAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         pos = position;
         inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(R.layout.post_gv_item, parent,false);
         ivGallery = itemView.findViewById(R.id.iv_gallery);
 //        ivGallery.setImageURI(mArrayUri.get(position));
         Glide.with(mContext).load(mArrayUri.get(position)).into(ivGallery);
+        ivGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, FullScreenImageActivity.class);
+                intent.putExtra("imageurl", mArrayUri.get(position).toString());
+                mContext.startActivity(intent);
+            }
+        });
         return itemView;
     }
 }

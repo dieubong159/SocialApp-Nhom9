@@ -1,17 +1,22 @@
 package com.nhom9.socialapp.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.nhom9.socialapp.FullScreenImageActivity;
 import com.nhom9.socialapp.Model.Chat;
 import com.nhom9.socialapp.R;
 
@@ -25,6 +30,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private Context mContext;
     private List<Chat> mChat;
     private String imageurl;
+    boolean isImageFitToScreen;
 
     FirebaseUser fuser;
 
@@ -47,10 +53,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MessageAdapter.ViewHolder holder, int position) {
 
         holder.msg_img.setImageBitmap(null);
-        Chat chat = mChat.get(position);
+        final Chat chat = mChat.get(position);
         String msg_type = chat.getType();
 
         holder.show_message.setText(chat.getMessage());
@@ -77,10 +83,18 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             holder.msg_img.setVisibility(View.GONE);
         }else {
             holder.show_message.setVisibility(View.GONE);
-            Glide.with(mContext).load(chat.getMessage())
+            Glide.with(mContext).load(chat.getMessage()).apply(new RequestOptions().override(350,350))
                     .into(holder.msg_img);
         }
 
+        holder.msg_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, FullScreenImageActivity.class);
+                intent.putExtra("imageurl", chat.getMessage());
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -104,6 +118,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             msg_img = itemView.findViewById(R.id.msg_img);
             this.setIsRecyclable(false);
         }
+
     }
 
     @Override

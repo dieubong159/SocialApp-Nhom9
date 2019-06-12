@@ -136,8 +136,10 @@ public class PostFragment extends Fragment {
                     mPosts.add(post);
                 }
                 Collections.reverse(mPosts);
-                postAdapter = new PostAdapter(getContext(), mPosts);
-                posts_view.setAdapter(postAdapter);
+                if(getContext()!=null) {
+                    postAdapter = new PostAdapter(getContext(), mPosts);
+                    posts_view.setAdapter(postAdapter);
+                }
             }
 
             @Override

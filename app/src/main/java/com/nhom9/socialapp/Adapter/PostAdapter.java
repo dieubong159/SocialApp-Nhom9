@@ -1,5 +1,6 @@
 package com.nhom9.socialapp.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -13,8 +14,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.nhom9.socialapp.CustomGridview;
 import com.nhom9.socialapp.Model.Post;
+import com.nhom9.socialapp.Model.User;
 import com.nhom9.socialapp.R;
 
 import java.util.ArrayList;
@@ -24,8 +31,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     private Context mContext;
     private List<Post> mPosts;
 
+
     FirebaseUser fuser;
     ArrayList<Uri> lstImageUri;
+    DatabaseReference reference;
 
     public PostAdapter(Context mContext, List<Post> mPosts){
         this.mContext = mContext;
@@ -41,29 +50,44 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
 
         final Post post = mPosts.get(i);
-        viewHolder.post_content.setText(post.getContent());
-        viewHolder.username.setText(post.getOwner().getUsername());
-        viewHolder.upload_time.setText(post.getUploadtime());
-        if(post.getOwner().getImageURL().equals("default")){
-            viewHolder.profile_image.setImageResource(R.mipmap.ic_user_round);
-        }else {
-            Glide.with(mContext).load(post.getOwner().getImageURL()).into(viewHolder.profile_image);
-        }
-
-            if(post.getImage().get(0).equals("none")){
-                viewHolder.post_img.setVisibility(View.GONE);
-            }else {
-                lstImageUri = new ArrayList<>();
-                for(int count = 0;count<post.getImage().size();count++)
-                {
-                    lstImageUri.add(Uri.parse(post.getImage().get(count)));
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(post.getOwner().getId());
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                viewHolder.post_content.setText(post.getContent());
+                viewHolder.username.setText(post.getOwner().getUsername());
+                viewHolder.upload_time.setText(post.getUploadtime());
+                User user = dataSnapshot.getValue(User.class);
+                if(user.getImageURL().equals("default")){
+                    viewHolder.profile_image.setImageResource(R.mipmap.ic_user_round);
+                }else {
+                    if(!((Activity)mContext).isFinishing()) {
+                        Glide.with(mContext).load(user.getImageURL()).into(viewHolder.profile_image);
+                    }
                 }
-                PostImageAdapter galleryAdapter = new PostImageAdapter(mContext, lstImageUri);
-                viewHolder.post_img.setAdapter(galleryAdapter);
+
+                if(post.getImage().get(0).equals("none")){
+                    viewHolder.post_img.setVisibility(View.GONE);
+                }else {
+                    lstImageUri = new ArrayList<>();
+                    for(int count = 0;count<post.getImage().size();count++)
+                    {
+                        lstImageUri.add(Uri.parse(post.getImage().get(count)));
+                    }
+                    PostImageAdapter galleryAdapter = new PostImageAdapter(mContext, lstImageUri);
+                    viewHolder.post_img.setAdapter(galleryAdapter);
+                }
+
             }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
