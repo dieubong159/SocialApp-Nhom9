@@ -45,7 +45,7 @@ import static android.app.Activity.RESULT_OK;
 public class ProfileFragment extends Fragment {
 
     CircleImageView image_profile;
-    TextView username, profile_email, profile_password;
+    TextView username, profile_email;
     Button btn_change_pic;
 
     DatabaseReference reference;
@@ -67,7 +67,6 @@ public class ProfileFragment extends Fragment {
         username = view.findViewById(R.id.username);
         btn_change_pic = view.findViewById(R.id.btn_change_pic);
         profile_email = view.findViewById(R.id.profile_email);
-        profile_password = view.findViewById(R.id.profile_password);
 
         storageReference = FirebaseStorage.getInstance().getReference("profile");
 

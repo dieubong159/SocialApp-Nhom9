@@ -68,18 +68,6 @@
                 android:textSize="20dp"
                 android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/profile_password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="-133dp"
-                android:layout_marginTop="280dp"
-                android:text="Password: 01663482341"
-                android:textSize="20dp"
-                android:textStyle="bold"/>
-
 
         </RelativeLayout>
 
