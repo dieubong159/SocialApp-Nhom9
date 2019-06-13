@@ -3,4 +3,6 @@
     <color name="colorPrimary">#2196F3</color>
     <color name="colorPrimaryDark">#2196F3</color>
     <color name="colorAccent">#F1F5F5</color>
+
+    <color name="google_blue">#4285F4</color>
 </resources>

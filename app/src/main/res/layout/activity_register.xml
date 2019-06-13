@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Create a new account"
-            android:textSize="20sp"
+            android:textSize="30dp"
             android:textStyle="bold"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
@@ -51,14 +51,27 @@
             app:met_floatingLabel="normal"
             android:hint="Password"/>
 
+        <!--<Button-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="register"-->
+            <!--android:id="@+id/btn_register"-->
+            <!--android:background="@color/colorPrimaryDark"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:textColor="#fff"/>-->
         <Button
+            android:id="@+id/btn_register"
+            style="@style/Base.TextAppearance.AppCompat.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="register"
-            android:id="@+id/btn_register"
-            android:background="@color/colorPrimaryDark"
-            android:layout_marginTop="10dp"
-            android:textColor="#fff"/>
+            android:layout_marginTop="16dp"
+            android:background="@drawable/background_signup"
+            android:clickable="true"
+            android:padding="16dp"
+            android:text="Register account"
+            android:textAllCaps="false"
+            android:textColor="#fff"
+            android:textSize="20sp" />
 
 
     </LinearLayout>
