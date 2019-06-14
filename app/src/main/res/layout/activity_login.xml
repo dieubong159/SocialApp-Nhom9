@@ -75,17 +75,19 @@
                 android:layout_height="1dp"
                 android:background="#f9d7db" />
 
-            <CheckBox
+
+            <TextView
+                android:id="@+id/forgot_password"
+                style="@style/TextAppearance.AppCompat.Body2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:buttonTint="@color/google_blue"
-                android:padding="8dp"
-                android:text="Remember me "
-                android:id="@+id/cb_rememberme"
+                android:layout_alignParentRight="true"
+                android:clickable="true"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp"
+                android:text="Forget your Password? "
                 android:textColor="#fff"
                 android:layout_below="@id/password"/>
-
             <Button
                 android:id="@+id/btn_login"
                 style="@style/Base.TextAppearance.AppCompat.Body1"
@@ -99,7 +101,7 @@
                 android:textAllCaps="false"
                 android:textColor="#3a8fff"
                 android:textSize="18sp"
-                android:layout_below="@+id/cb_rememberme"/>
+                android:layout_below="@+id/forgot_password"/>
 
             <Button
                 android:id="@+id/register"
@@ -116,17 +118,7 @@
                 android:textSize="18sp"
                 android:layout_below="@id/btn_login"/>
 
-            <TextView
-                android:id="@+id/forgot_password"
-                style="@style/TextAppearance.AppCompat.Body2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:clickable="true"
-                android:padding="16dp"
-                android:text="Forget your Password? "
-                android:textColor="#fff"
-                android:layout_below="@id/register"/>
+
 
         </RelativeLayout>
 </RelativeLayout>
