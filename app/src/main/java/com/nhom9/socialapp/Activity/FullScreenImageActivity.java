@@ -1,4 +1,4 @@
-package com.nhom9.socialapp;
+package com.nhom9.socialapp.Activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.nhom9.socialapp.R;
 
 public class FullScreenImageActivity extends AppCompatActivity {
 

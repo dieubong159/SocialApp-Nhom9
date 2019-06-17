@@ -1,4 +1,4 @@
-package com.nhom9.socialapp.Fragments;
+package com.nhom9.socialapp.Notifications;
 
 import com.nhom9.socialapp.Notifications.MyResponse;
 import com.nhom9.socialapp.Notifications.Sender;

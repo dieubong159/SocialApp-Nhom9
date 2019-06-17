@@ -1,4 +1,4 @@
-package com.nhom9.socialapp;
+package com.nhom9.socialapp.Activity;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -38,7 +38,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.nhom9.socialapp.Adapter.MessageAdapter;
-import com.nhom9.socialapp.Fragments.APIService;
+import com.nhom9.socialapp.Notifications.APIService;
 import com.nhom9.socialapp.Model.Chat;
 import com.nhom9.socialapp.Model.User;
 import com.nhom9.socialapp.Notifications.Client;
@@ -47,6 +47,7 @@ import com.nhom9.socialapp.Notifications.MyFirebaseMessaging;
 import com.nhom9.socialapp.Notifications.MyResponse;
 import com.nhom9.socialapp.Notifications.Sender;
 import com.nhom9.socialapp.Notifications.Token;
+import com.nhom9.socialapp.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

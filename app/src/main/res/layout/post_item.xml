@@ -41,7 +41,7 @@
         android:textSize="15sp"
         />
 
-    <com.nhom9.socialapp.CustomGridview
+    <com.nhom9.socialapp.UICustom.CustomGridview
         android:id="@+id/gv_post"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -50,6 +50,6 @@
         android:clickable="false"
         android:numColumns="1">
 
-    </com.nhom9.socialapp.CustomGridview>
+    </com.nhom9.socialapp.UICustom.CustomGridview>
 
 </RelativeLayout>

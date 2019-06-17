@@ -16,8 +16,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.nhom9.socialapp.MainActivity;
-import com.nhom9.socialapp.MessageActivity;
+import com.nhom9.socialapp.Activity.MainActivity;
+import com.nhom9.socialapp.Activity.MessageActivity;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
 

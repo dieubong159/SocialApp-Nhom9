@@ -13,18 +13,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FullScreenImageActivity"></activity>
+        <activity android:name=".Activity.FullScreenImageActivity"></activity>
         <activity
-            android:name=".PostStatusActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".Activity.PostStatusActivity"
+            android:parentActivityName=".Activity.MainActivity" />
         <activity android:name=".StartActivity">
         </activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name=".Activity.RegisterActivity"
             android:parentActivityName=".StartActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".Activity.MainActivity" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".Activity.LoginActivity"
             android:parentActivityName=".StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,10 +32,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MessageActivity" />
+        <activity android:name=".Activity.MessageActivity" />
         <activity
-            android:name=".ResetPasswordActivity"
-            android:parentActivityName=".LoginActivity" />
+            android:name=".Activity.ResetPasswordActivity"
+            android:parentActivityName=".Activity.LoginActivity" />
 
         <service
             android:name=".Notifications.MyFirebaseIdService"

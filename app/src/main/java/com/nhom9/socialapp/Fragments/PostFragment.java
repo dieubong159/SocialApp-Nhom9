@@ -1,8 +1,6 @@
 package com.nhom9.socialapp.Fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -26,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.nhom9.socialapp.Adapter.PostAdapter;
 import com.nhom9.socialapp.Model.Post;
 import com.nhom9.socialapp.Model.User;
-import com.nhom9.socialapp.PostStatusActivity;
+import com.nhom9.socialapp.Activity.PostStatusActivity;
 import com.nhom9.socialapp.R;
 import com.rengwuxian.materialedittext.MaterialEditText;
 

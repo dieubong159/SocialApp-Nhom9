@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.nhom9.socialapp.FullScreenImageActivity;
+import com.nhom9.socialapp.Activity.FullScreenImageActivity;
 import com.nhom9.socialapp.R;
 
 import java.util.ArrayList;

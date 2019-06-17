@@ -1,4 +1,4 @@
-package com.nhom9.socialapp;
+package com.nhom9.socialapp.UICustom;
 
 import android.content.Context;
 import android.util.AttributeSet;

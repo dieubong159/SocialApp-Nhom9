@@ -1,4 +1,4 @@
-package com.nhom9.socialapp;
+package com.nhom9.socialapp.Activity;
 
 import android.app.ProgressDialog;
 import android.content.ClipData;
@@ -30,14 +30,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.mhmtk.twowaygrid.TwoWayGridView;
 import com.nhom9.socialapp.Adapter.GalleryAdapter;
-import com.nhom9.socialapp.Fragments.APIService;
+import com.nhom9.socialapp.Notifications.APIService;
 import com.nhom9.socialapp.Model.User;
 import com.nhom9.socialapp.Notifications.Client;
 import com.nhom9.socialapp.Notifications.Data;
@@ -45,6 +44,7 @@ import com.nhom9.socialapp.Notifications.MyFirebaseMessaging;
 import com.nhom9.socialapp.Notifications.MyResponse;
 import com.nhom9.socialapp.Notifications.Sender;
 import com.nhom9.socialapp.Notifications.Token;
+import com.nhom9.socialapp.R;
 import com.rengwuxian.materialedittext.MaterialMultiAutoCompleteTextView;
 
 import java.text.SimpleDateFormat;

@@ -8,15 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.nhom9.socialapp.FullScreenImageActivity;
+import com.nhom9.socialapp.Activity.FullScreenImageActivity;
 import com.nhom9.socialapp.Model.Chat;
 import com.nhom9.socialapp.R;
 
